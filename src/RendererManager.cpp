@@ -10,6 +10,9 @@
 
 void HOOK_FUNC(RendererManager, InitD3D)
 {
+	static ImVector<ImWchar> vRange;
+	static ImFontGlyphRangesBuilder cGlyph;
+
 	oldFunc();
 	auto pRenderer = RE::BSGraphics::Renderer::GetSingleton();
 	auto pConfig = Config::GetSingleton();
@@ -27,13 +30,26 @@ void HOOK_FUNC(RendererManager, InitD3D)
 	ImGui::CreateContext();
 
 	ImGuiIO& io = ImGui::GetIO();
-	static ImVector<ImWchar> vRange;
-	static ImFontGlyphRangesBuilder cGlyph;
+
 	cGlyph.AddRanges(io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
-	io.Fonts->AddFontDefault();
-	ImFont* font = io.Fonts->AddFontFromFileTTF((*pConfig->m_strFont).c_str(), *pConfig->m_iFontSize, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
-	IM_ASSERT(font != NULL);
-	ImGui::GetIO().FontDefault = font;
+	cGlyph.BuildRanges(&vRange);
+
+	ImFontConfig fontConfig{};
+	//fontConfig.MergeMode = true;
+	fontConfig.GlyphRanges = vRange.Data;
+	fontConfig.SizePixels = *pConfig->m_iFontSize;
+
+	if (*pConfig->m_bUseCustomFont) {
+		if (!std::filesystem::exists((*pConfig->m_strFont).c_str())) {
+			ERROR("Font file not found");
+		}
+		ImFont* font = io.Fonts->AddFontFromFileTTF((*pConfig->m_strFont).c_str(), *pConfig->m_iFontSize, &fontConfig);
+		if (font == nullptr) {
+			ERROR("Failed to load font");
+		}
+		io.FontDefault = font;
+	}
+	io.Fonts->Build();
 
 	ImGui_ImplWin32_Init(sd.OutputWindow);
 	ImGui_ImplDX11_Init(pD3DDevice, pD3DDeviceContext);

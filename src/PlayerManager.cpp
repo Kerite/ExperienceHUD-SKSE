@@ -2,8 +2,8 @@
 
 #include "detours/detours.h"
 
-#include "Meter.h"
 #include "Config.h"
+#include "Meter.h"
 
 HOOK_FUNC_THIS(PlayerManager, AddSkillExperience, void, RE::PlayerCharacter, RE::ActorValue a_enumSkillId, float a_fExperience)
 {
@@ -17,17 +17,19 @@ HOOK_FUNC_THIS(PlayerManager, AddSkillExperience, void, RE::PlayerCharacter, RE:
 	//auto pPlayer = RE::PlayerCharacter::GetSingleton();
 	auto* pSkills = a_pThis->GetInfoRuntimeData().skills;
 	auto oldSkillData = pSkills->data->skills[skillOffset - 6];
+	auto oldLevel = pValueOwner->GetActorValue(a_enumSkillId);
 
 	oldFunc(a_pThis, a_enumSkillId, a_fExperience);
 
 	auto skillData = pSkills->data->skills[skillOffset - 6];
+	auto newLevel = pValueOwner->GetActorValue(a_enumSkillId);
 	if (skillData.levelThreshold > 0.f && a_fExperience > 0.f) {
 		float deltaExp = skillData.xp - oldSkillData.xp;
-		if (deltaExp < 0.f) {
+		if (oldLevel != newLevel) {
 			deltaExp += oldSkillData.levelThreshold;
 		}
 		pMeter->Add(static_cast<Skills>(skillOffset - 6), pSkillInfo->GetName(), deltaExp, skillData.xp, skillData.levelThreshold);
-		DEBUG("AddSkillExperience [{}] {}, +{} , xp: ({}/{}), level: {}", skillOffset, pSkillInfo->GetName(), deltaExp, skillData.xp, skillData.levelThreshold, pValueOwner->GetActorValue(a_enumSkillId));
+		DEBUG("AddSkillExperience [{}] {}, +{} , xp: ({}/{}), level: {} -> {}", skillOffset, pSkillInfo->GetName(), deltaExp, skillData.xp, skillData.levelThreshold, oldLevel, newLevel);
 	};
 }
 

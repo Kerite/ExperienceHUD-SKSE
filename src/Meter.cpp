@@ -23,10 +23,6 @@ void Meter::Render()
 	if (!m_bToogled.load()) {
 		return;
 	}
-	auto pUI = RE::UI::GetSingleton();
-	if (!pUI || pUI->GameIsPaused() || !pUI->GetMenu<RE::HUDMenu>()) {
-		return;
-	}
 	auto pConfig = Config::GetSingleton();
 	static constexpr ImGuiWindowFlags windowFlag = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs;
 	static ImVec2 alignmentVec = ImVec2(*pConfig->m_iHAlign / 2.f, *pConfig->m_iVAlign / 2.f);

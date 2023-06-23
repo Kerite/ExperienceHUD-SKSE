@@ -4,10 +4,11 @@
 #include "Utils.h"
 using namespace DKUtil::Alias;
 
-DEF_SINGLETON(Config)
+class Config final : public Singleton<Config>
 {
 public:
 	void Load();
+	Boolean m_bUseCustomFont{ "UseCustomFont" };
 	String m_strFont{ "Font" };
 	Integer m_iFontSize{ "FontSize" };
 	Integer m_iHAlign{ "HorizontalAlignment" };

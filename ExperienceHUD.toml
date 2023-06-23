@@ -1,6 +1,7 @@
 [Fonts]
-Font = "C:\\Windows\\Fonts\\msyh.ttc"
 FontSize = 20
+UseCustomFont = true
+Font = "C:\\Windows\\Fonts\\msyh.ttc"
 
 [Position]
 # 0: left, 1: middle, 2: right

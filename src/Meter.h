@@ -12,7 +12,7 @@ struct SSKill
 
 using Skills = RE::PlayerCharacter::PlayerSkills::Data::Skills::Skill;
 
-DEF_SINGLETON(Meter)
+class Meter final : public Singleton<Meter>
 {
 public:
 	void Render();
