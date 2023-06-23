@@ -1,0 +1,22 @@
+{
+  "name": "experiencehud",
+  "version-string": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "imgui",
+      "features": [
+        "dx11-binding",
+        "win32-binding"
+      ]
+    },
+    "detour",
+    "spdlog"
+  ],
+  "features": {
+    "mo2-install": {
+      "description": "Experience HUD"
+    }
+  }
+}
