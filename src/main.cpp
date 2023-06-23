@@ -1,4 +1,5 @@
-﻿#include "PlayerManager.h"
+﻿#include "Config.h"
+#include "PlayerManager.h"
 #include "RendererManager.h"
 
 void MessageHandler(SKSE::MessagingInterface::Message* a_msg) noexcept
@@ -27,6 +28,7 @@ DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 
 	PlayerManager::GetSingleton()->Install();
 	RendererManager::GetSingleton()->Install();
+	Config::GetSingleton()->Load();
 
 	return true;
 }

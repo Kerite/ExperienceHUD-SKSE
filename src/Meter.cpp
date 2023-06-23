@@ -1,4 +1,5 @@
 ﻿#include "Meter.h"
+#include "Config.h"
 
 void Meter::Add(Skills a_eSkillID, const std::string_view a_sSkillName, float a_fAddedExp, float a_fCurrentExp, float a_fThreshold)
 {
@@ -26,11 +27,14 @@ void Meter::Render()
 	if (!pUI || pUI->GameIsPaused() || !pUI->GetMenu<RE::HUDMenu>()) {
 		return;
 	}
+	auto pConfig = Config::GetSingleton();
 	static constexpr ImGuiWindowFlags windowFlag = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs;
+	static ImVec2 alignmentVec = ImVec2(*pConfig->m_iHAlign / 2.f, *pConfig->m_iVAlign / 2.f);
 
 	float screenSizeX = ImGui::GetIO().DisplaySize.x, screenSizeY = ImGui::GetIO().DisplaySize.y;
+	ImVec2 screenPos = ImVec2(screenSizeX * alignmentVec.x + *pConfig->m_iHOffset, screenSizeY * alignmentVec.y + *pConfig->m_iVOffset);
 	//ImGui::SetNextWindowSize(ImVec2(screenSizeX, screenSizeY));
-	ImGui::SetNextWindowPos(ImVec2(screenSizeX / 2, screenSizeY), 0, ImVec2(0.5, 1));
+	ImGui::SetNextWindowPos(ImVec2(screenSizeX * alignmentVec.x, screenSizeY * alignmentVec.y), 0, alignmentVec);
 
 	ImGui::Begin("ColaTea_ExpHUD", nullptr, windowFlag);
 

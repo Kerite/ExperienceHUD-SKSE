@@ -5,12 +5,14 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
+#include "Config.h"
 #include "Meter.h"
 
 void HOOK_FUNC(RendererManager, InitD3D)
 {
 	oldFunc();
 	auto pRenderer = RE::BSGraphics::Renderer::GetSingleton();
+	auto pConfig = Config::GetSingleton();
 
 	IDXGISwapChain* pDXGISwapChain = pRenderer->data.renderWindows[0].swapChain;
 	DXGI_SWAP_CHAIN_DESC sd{};
@@ -25,8 +27,11 @@ void HOOK_FUNC(RendererManager, InitD3D)
 	ImGui::CreateContext();
 
 	ImGuiIO& io = ImGui::GetIO();
+	static ImVector<ImWchar> vRange;
+	static ImFontGlyphRangesBuilder cGlyph;
+	cGlyph.AddRanges(io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 	io.Fonts->AddFontDefault();
-	ImFont* font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\msyh.ttc", 20.f, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+	ImFont* font = io.Fonts->AddFontFromFileTTF((*pConfig->m_strFont).c_str(), *pConfig->m_iFontSize, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 	IM_ASSERT(font != NULL);
 	ImGui::GetIO().FontDefault = font;
 

@@ -1,0 +1,13 @@
+[Fonts]
+Font = "C:\\Windows\\Fonts\\msyh.ttc"
+FontSize = 20
+
+[Position]
+# 0: left, 1: middle, 2: right
+HorizontalAlignment = 2
+# 0: top, 1: middle, 2: bottom
+VerticalAlignment = 1
+
+[Offset]
+HorizontalOffset = 0
+VerticalOffset = 0

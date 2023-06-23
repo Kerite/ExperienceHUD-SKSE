@@ -3,6 +3,7 @@
 #include "detours/detours.h"
 
 #include "Meter.h"
+#include "Config.h"
 
 HOOK_FUNC_THIS(PlayerManager, AddSkillExperience, void, RE::PlayerCharacter, RE::ActorValue a_enumSkillId, float a_fExperience)
 {
@@ -11,6 +12,7 @@ HOOK_FUNC_THIS(PlayerManager, AddSkillExperience, void, RE::PlayerCharacter, RE:
 	auto pMeter = Meter::GetSingleton();
 	auto pSkillInfo = pActorValueList->GetActorValue(a_enumSkillId);
 	auto skillOffset = static_cast<std::underlying_type<RE::ActorValue>::type>(a_enumSkillId);
+	auto pConfig = Config::GetSingleton();
 
 	//auto pPlayer = RE::PlayerCharacter::GetSingleton();
 	auto* pSkills = a_pThis->GetInfoRuntimeData().skills;
