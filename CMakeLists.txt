@@ -52,6 +52,9 @@ source_group(
 add_subdirectory($ENV{CommonLibSSEPath} CommonLibSSE)
 add_subdirectory($ENV{DKUtilPath} DKUtil)
 find_package(spdlog CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_path(DETOURS_INCLUDE_DIRS "detours/detours.h")
+find_library(DETOURS_LIBRARY detours REQUIRED)
 
 # cmake target
 # runtime
@@ -72,15 +75,18 @@ target_include_directories(
 		${CMAKE_CURRENT_BINARY_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/include
 		${CMAKE_CURRENT_SOURCE_DIR}/src
+		${DETOURS_INCLUDE_DIRS}
 )
 
 # linkage
 target_link_libraries(
 	${PROJECT_NAME} 
 	PRIVATE
+		${DETOURS_LIBRARY}
 		CommonLibSSE::CommonLibSSE
 		DKUtil::DKUtil
 		spdlog::spdlog
+		imgui::imgui
 )
 
 # compiler def
