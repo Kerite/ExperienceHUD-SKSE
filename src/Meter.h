@@ -16,13 +16,14 @@ DEF_SINGLETON(Meter)
 {
 public:
 	void Render();
-	void Add(Skills a_eSkill, const std::string a_sSkillName, float a_fAddedExperience, float a_fCurrentExp, float a_fThreshold);
+	void Add(Skills a_eSkill, const std::string_view a_sSkillName, float a_fAddedExperience, float a_fCurrentExp, float a_fThreshold);
 	void Toggle()
 	{
 		m_bToogled = !m_bToogled;
 	}
 
 private:
+	float m_fTextWidth = 0;
 	std::atomic_bool m_bToogled = true;
 	std::map<Skills, SSKill> m_mSkills;
 };

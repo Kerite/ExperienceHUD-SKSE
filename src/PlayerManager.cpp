@@ -24,7 +24,7 @@ HOOK_FUNC_THIS(PlayerManager, AddSkillExperience, void, RE::PlayerCharacter, RE:
 		if (deltaExp < 0.f) {
 			deltaExp += oldSkillData.levelThreshold;
 		}
-		pMeter->Add(static_cast<Skills>(skillOffset - 6), std::string(pSkillInfo->GetName()), deltaExp, skillData.xp, skillData.levelThreshold);
+		pMeter->Add(static_cast<Skills>(skillOffset - 6), pSkillInfo->GetName(), deltaExp, skillData.xp, skillData.levelThreshold);
 		DEBUG("AddSkillExperience [{}] {}, +{} , xp: ({}/{}), level: {}", skillOffset, pSkillInfo->GetName(), deltaExp, skillData.xp, skillData.levelThreshold, pValueOwner->GetActorValue(a_enumSkillId));
 	};
 }

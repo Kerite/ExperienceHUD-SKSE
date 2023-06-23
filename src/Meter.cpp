@@ -1,13 +1,20 @@
 ﻿#include "Meter.h"
 
-void Meter::Add(Skills a_eSkillID, const std::string a_sSkillName, float a_fAddedExp, float a_fCurrentExp, float a_fThreshold)
+void Meter::Add(Skills a_eSkillID, const std::string_view a_sSkillName, float a_fAddedExp, float a_fCurrentExp, float a_fThreshold)
 {
+	bool bInsert = false;
+	if (!m_mSkills.contains(a_eSkillID)) {
+		bInsert = true;
+	}
 	auto& element = m_mSkills[a_eSkillID];
 	element.m_fLastAddedExp = a_fAddedExp;
 	element.m_fCurrentExp = a_fCurrentExp;
 	element.m_fExperienceThreshold = a_fThreshold;
 	element.m_ulDuration = 600;
-	element.m_sSkillName = a_sSkillName;
+	if (bInsert) {
+		element.m_sSkillName = std::string(a_sSkillName.data());
+		m_fTextWidth = std::max(ImGui::CalcTextSize(a_sSkillName.data()).x + 10.f, m_fTextWidth);
+	}
 }
 
 void Meter::Render()
@@ -32,15 +39,13 @@ void Meter::Render()
 		if (it->second.m_ulDuration <= 0) {
 			continue;
 		}
-		//ImGui::Text("%s %.2f/%.0f (+%.2f)", it->second.m_sSkillName.data(), it->second.m_fCurrentExp, it->second.m_fExperienceThreshold, it->second.m_fLastAddedExp);
-		//ImGui::SameLine();
-		ImGui::Text("%s:", skill.m_sSkillName.c_str());
-		ImGui::SameLine();
+		ImGui::Text(skill.m_sSkillName.c_str());
 
+		ImGui::SameLine(m_fTextWidth);
 		auto progressBarContent = std::format("{:.2f}/{:.2f}", skill.m_fCurrentExp, skill.m_fExperienceThreshold);
-		ImGui::ProgressBar(skill.m_fCurrentExp / skill.m_fExperienceThreshold, ImVec2(0, 0), progressBarContent.c_str());
-		ImGui::SameLine();
+		ImGui::ProgressBar(skill.m_fCurrentExp / skill.m_fExperienceThreshold, ImVec2(180, 0), progressBarContent.c_str());
 
+		ImGui::SameLine();
 		ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
 		ImGui::Text("%+.2f", skill.m_fLastAddedExp);
 		ImGui::PopStyleColor();
